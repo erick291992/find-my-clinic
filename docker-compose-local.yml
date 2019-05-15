@@ -3,7 +3,7 @@ services:
   client:
     build:
       context: . #path to where to find docker file
-      dockerfile: Dockerfile-local # name of docker file
+      dockerfile: local.dockerfile # name of docker file
     command: npm start
     volumes:
       - '.:/usr/src/app' # . means current directory so it will mount current to /usr/src/app
