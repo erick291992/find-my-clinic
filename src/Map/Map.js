@@ -12,7 +12,7 @@ class Map extends Component {
   }
 
   renderMap = () => {
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyC39tE7k6mrzeLSKHk1Wdday57DIR0mVEE&callback=initMap")
+    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBXvxO5-tdTcujv7Ke3t-1LeDhAdRNqtYM&callback=initMap")
     window.initMap = this.initMap
   }
 
@@ -71,7 +71,7 @@ class Map extends Component {
         // Open An InfoWindow
         infowindow.open(map, marker)
       })
-
+      return marker
     })
   }
 
