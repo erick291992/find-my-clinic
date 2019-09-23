@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import Map from './Map/Map'
+// import Map from './components/Map'
 // import axios from 'axios'
 import AlignItemsList from './ListClinic/ListClinic'
+// import NavBar from './components/NavBar'
+import Home from './containers/Home'
+import HomeContainer from './containers/HomeContainer.jsx'
+import NavBar from './components/NavBar';
 
 class App extends Component {
 
-  render() {
-    return (
-      <div>
-        <h1>hello</h1>
-        <div>
-          <div className="floatleft">
-            <Map/>
-          </div>
-          <div className="floatright">
-            <AlignItemsList/>
-          </div>
-        </div>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<NavBar></NavBar>
+				<HomeContainer>
+				</HomeContainer>
+			</div>
+		);
+	}
 }
 
 export default App;
