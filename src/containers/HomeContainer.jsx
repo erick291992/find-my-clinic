@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 // import NavBar from '../components/NavBar';
 import GoogleMapComponent from '../components/GoogleMapComponent';
 import axios from 'axios'
+import clinicsService from '../service/ClinicsService';
+import userGeo from '../util/userGeo';
 
 const useStyles = makeStyles(theme => ({
 
@@ -27,10 +29,10 @@ const useStyles = makeStyles(theme => ({
 		// padding: 0,
 		// width: '100%',
 		height: '100%',
-    overflow: 'auto',
-    // maxHeight: 100,
+		overflow: 'auto',
+		// maxHeight: 100,
 	},
-	
+
 	gridGoogleMap: {
 		height: '100%',
 	},
@@ -41,54 +43,62 @@ const useStyles = makeStyles(theme => ({
 export default function SimpleContainer() {
 	const classes = useStyles();
 	const [clinics, setClinics] = useState([]);
-	const [userLocation, setUserLocation] = useState({ lat: -34.397, lng: 150.644 });
+	// const [userLocation, setUserLocation] = useState({ lat: -34.397, lng: 150.644 });
+	const [userLocation, setUserLocation] = useState({});
 
 
 	useEffect(() => {
-		getClinics()
+		// getClinics()
 		getGeoLocation()
+		getClinics()
+		// clinicsService.getClinics()
+		// 	.then(response => {
+		// 		// tempClinic = response
+		// 		setClinics(response)
+		// 		console.log('step 1', response)
+		// 		return userGeo.getUserLocation()
+		// 		// return response
+		// 	})
+		// 	.then((currentLocation) => {
+		// 		console.log('step 3', currentLocation)
+		// 		setUserLocation(currentLocation)
+		// 	})
+		// 	.catch(error => {
+		// 		console.log('err', error)
+		// 		// setUserLocation(userGeo.userDefaultLocation)
+		// 	})
 	}, [])
 
 	const getGeoLocation = () => {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				position => {
-					setUserLocation({
-						lat: position.coords.latitude,
-						lng: position.coords.longitude
-					})
-					console.log('userLocation', userLocation)
-				}
-			)
-		} else {
-			// setUserLocation({ lat: -34.397, lng: 150.644 })
-		}
+		userGeo.getUserLocation()
+			.then((currentLocation) => {
+				console.log('currentLocation', currentLocation)
+				setUserLocation(currentLocation)
+			})
+			.catch(error => {
+				console.log('err', error)
+				setUserLocation(userGeo.userDefaultLocation)
+			})
 	}
 
 	const getClinics = () => {
-		const endPoint = "http://localhost:8000/api/clinics"
-		const parameters = {
-		}
-
-		axios.get(endPoint + new URLSearchParams(parameters))
+		clinicsService.getClinics()
 			.then(response => {
-				console.log(typeof (response))
-				console.log('response', response.data[0])
-				// setClinics(response.data.splice(0,4))
-				setClinics(response.data)
+				setClinics(response)
 			})
 			.catch(error => {
-				console.log("ERROR!! " + error)
+				console.log('err', error)
 			})
 	}
+
 	return (
 		<React.Fragment>
 			{/* <CssBaseline /> */}
 			<main>
 				<Container className={classes.container} maxWidth="xl">
 					{/* End hero unit */}
-					<Grid className= {classes.grid} container spacing={4}>
-						<Grid className={classes.gridList}  item xs={12} sm={12} md={7}>
+					<Grid className={classes.grid} container spacing={4}>
+						<Grid className={classes.gridList} item xs={12} sm={12} md={7}>
 							<List>
 								{clinics.map((clinic) => {
 									return (
@@ -97,10 +107,9 @@ export default function SimpleContainer() {
 										</ListItem>
 									)
 								})}
-								{/* <Clinic clinic= {clinics[0]}></Clinic> */}
 							</List>
 						</Grid>
-						<Grid className= {classes.gridGoogleMap} item xs={12} sm={12} md={5}>
+						<Grid className={classes.gridGoogleMap} item xs={12} sm={12} md={5}>
 							<GoogleMapComponent isMarkerShown={false} userLocation={userLocation} clinics={clinics}></GoogleMapComponent>
 						</Grid>
 					</Grid>

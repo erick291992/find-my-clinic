@@ -49,8 +49,6 @@ export default function GoogleMapComponent(props) {
 
 
 	useEffect(() => {
-		console.log('clinics', props.clinics)
-		console.log('user',props.userLocation)
 		delayedShowMarker()
 	})
 

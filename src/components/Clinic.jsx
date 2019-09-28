@@ -51,9 +51,9 @@ export default function Clinic(props) {
 					{props.clinic.address}
         </Typography>
 				<Typography>
-				{console.log(props.clinic)}
-				{console.log(JSON.stringify(props.clinic.location))}
-					lat:{JSON.stringify(props.clinic.location)}
+				{/* {console.log(props.clinic)} */}
+				{/* {console.log(JSON.stringify(props.clinic.location))} */}
+					{/* lat:{JSON.stringify(props.clinic.location)} */}
         </Typography>
 				<Typography>
 					{/* lng:{props.clinic.location.lng} */}
