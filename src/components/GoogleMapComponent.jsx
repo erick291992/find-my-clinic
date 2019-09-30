@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card';
 
 const MyMapComponent = compose(
 	withProps({
-		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBXvxO5-tdTcujv7Ke3t-1LeDhAdRNqtYM&callback=initMap",
+		googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBXvxO5-tdTcujv7Ke3t-1LeDhAdRNqtYM',
 		loadingElement: <div style={{ height: `100%` }} />,
 		containerElement: <div style={{ height: `100%` }} />,
 		mapElement: <div style={{ height: `100%` }} />,
@@ -16,9 +16,10 @@ const MyMapComponent = compose(
 )((props) =>
 	<GoogleMap
 		defaultZoom={8}
-		defaultCenter={props.userLocation}
+		defaultCenter={{ lat: parseFloat(props.userLocation.lat), lng: parseFloat(props.userLocation.lng) }}
 	>
 		{(props.clinics.map(clinic => {
+			// console.log('my clinic', clinic)
 			return (
 				<Marker
 					key={clinic._id}
@@ -27,7 +28,7 @@ const MyMapComponent = compose(
 				/>
 			);
 		}))}
-	</GoogleMap>
+	</GoogleMap >
 )
 
 
@@ -68,12 +69,12 @@ export default function GoogleMapComponent(props) {
 	return (
 		<Card className={classes.card}>
 			<MyMapComponent
-			isMarkerShown={isMarkerShown}
-			onMarkerClick={handleMarkerClick}
-			userLocation = {props.userLocation}
-			clinics = {props.clinics}
+				isMarkerShown={isMarkerShown}
+				onMarkerClick={handleMarkerClick}
+				userLocation={props.userLocation}
+				clinics={props.clinics}
 			/>
 		</Card>
-		
+
 	);
 }

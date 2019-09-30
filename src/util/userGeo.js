@@ -13,15 +13,16 @@ const getUserLocation = () => {
 			navigator.geolocation.getCurrentPosition(
 				position => {
 					resolve({
-						lat: position.coords.latitude,
-						lng: position.coords.longitude
+						lat: parseFloat(position.coords.latitude),
+						lng: parseFloat(position.coords.longitude),
 					})
 				}
 				, (error) => {
 					// console.log('------')
 					// console.log('error', error)
-					reject(error)
-					// resolve(userDefaultLocation)
+					let location = { lat: parseFloat(-34.397), lng: parseFloat(150.644) };
+					// reject(error)
+					resolve(location);
 				});
 		} else {
 			console.log('no geo')

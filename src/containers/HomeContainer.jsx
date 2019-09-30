@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import { FixedSizeList } from 'react-window';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Container from '@material-ui/core/Container';
@@ -10,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 // import NavBar from '../components/NavBar';
 import GoogleMapComponent from '../components/GoogleMapComponent';
-import axios from 'axios'
 import clinicsService from '../service/ClinicsService';
 import userGeo from '../util/userGeo';
 
@@ -44,52 +40,72 @@ export default function SimpleContainer() {
 	const classes = useStyles();
 	const [clinics, setClinics] = useState([]);
 	// const [userLocation, setUserLocation] = useState({ lat: -34.397, lng: 150.644 });
-	const [userLocation, setUserLocation] = useState({});
+	const [userLocation, setUserLocation] = useState(userGeo.userDefaultLocation);
+	const [page, setPage] = useState(1);
+	const [isLoading, setIsLoading] = useState(true);
 
+	const loadMoreData = () => {
+		setPage(page + 1);
+	};
 
 	useEffect(() => {
 		// getClinics()
-		getGeoLocation()
-		getClinics()
-		// clinicsService.getClinics()
-		// 	.then(response => {
-		// 		// tempClinic = response
-		// 		setClinics(response)
-		// 		console.log('step 1', response)
-		// 		return userGeo.getUserLocation()
-		// 		// return response
-		// 	})
-		// 	.then((currentLocation) => {
-		// 		console.log('step 3', currentLocation)
-		// 		setUserLocation(currentLocation)
-		// 	})
-		// 	.catch(error => {
-		// 		console.log('err', error)
-		// 		// setUserLocation(userGeo.userDefaultLocation)
-		// 	})
-	}, [])
+		// getGeoLocation()
+		// getClinics()
+		// start()
 
-	const getGeoLocation = () => {
-		userGeo.getUserLocation()
-			.then((currentLocation) => {
-				console.log('currentLocation', currentLocation)
+		Promise.all([userGeo.getUserLocation(), clinicsService.getClinics()])
+			.then(([currentLocation, resClinics]) => {
+				// console.log('currentLocation', currentLocation)
+				// console.log('resClinics', resClinics)
 				setUserLocation(currentLocation)
-			})
-			.catch(error => {
-				console.log('err', error)
-				setUserLocation(userGeo.userDefaultLocation)
-			})
-	}
+				setClinics(resClinics)
+				setIsLoading(false);
+				console.log('currentLocation', currentLocation)
+				console.log('resClinics', resClinics)
+			});
+	}, [page])
 
-	const getClinics = () => {
-		clinicsService.getClinics()
-			.then(response => {
-				setClinics(response)
-			})
-			.catch(error => {
-				console.log('err', error)
-			})
-	}
+	// const start = () => {
+	// 	clinicsService.getClinics()
+	// 		.then(response => {
+	// 			// tempClinic = response
+	// 			setClinics(response)
+	// 			console.log('step 1', response)
+	// 			return userGeo.getUserLocation()
+	// 			// return response
+	// 		})
+	// 		.then((currentLocation) => {
+	// 			console.log('step 3', currentLocation)
+	// 			setUserLocation(currentLocation)
+	// 		})
+	// 		.catch(error => {
+	// 			console.log('err', error)
+	// 			// setUserLocation(userGeo.userDefaultLocation)
+	// 		})
+	// }
+
+	// const getGeoLocation = () => {
+	// 	userGeo.getUserLocation()
+	// 		// .then((currentLocation) => {
+	// 		// 	console.log('currentLocation', currentLocation)
+	// 		// 	setUserLocation(currentLocation)
+	// 		// })
+	// 		// .catch(error => {
+	// 		// 	console.log('err', error)
+	// 		// 	setUserLocation(userGeo.userDefaultLocation)
+	// 		// })
+	// }
+
+	// const getClinics = () => {
+	// 	clinicsService.getClinics()
+	// 		// .then(response => {
+	// 		// 	setClinics(response)
+	// 		// })
+	// 		// .catch(error => {
+	// 		// 	console.log('err', error)
+	// 		// })
+	// }
 
 	return (
 		<React.Fragment>
